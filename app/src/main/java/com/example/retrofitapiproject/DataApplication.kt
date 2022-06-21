@@ -11,4 +11,13 @@ import org.kodein.di.generic.instance
 import org.kodein.di.generic.provider
 import org.kodein.di.generic.singleton
 
-class DataApplication: Application()
+class DataApplication: Application(),KodeinAware{
+    override val kodein: Kodein = Kodein.lazy {
+        import(androidXModule(this@DataApplication))
+        bind() from singleton { DataRepository() }
+
+        bind() from provider {
+            DataViewModelFactory(this@DataApplication,instance())
+        }
+    }
+}
